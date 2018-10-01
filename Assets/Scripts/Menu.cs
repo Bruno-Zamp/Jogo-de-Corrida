@@ -1,7 +1,6 @@
 ﻿// Bruno de Almeida Zampirom - 23/09/2018
+// Refatorado 01/10/2018
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Menu : LoadLevel {
@@ -14,12 +13,12 @@ public class Menu : LoadLevel {
     {
         Application.Quit();
     }
+    public void Ranking(GameObject Rkg)
+    {
+        Rkg.SetActive(!Rkg.active);   
+    }
     public void Opcoes(GameObject Opc)
     {
-        Opc.SetActive(true);
-    }
-    public void Voltar(GameObject Opc)
-    {
-        Opc.SetActive(false);
+        Opc.SetActive(!Opc.active);
     }
 }
