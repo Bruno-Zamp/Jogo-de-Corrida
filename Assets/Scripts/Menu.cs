@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Menu : LoadLevel {
 
+    [SerializeField]
+    private GameObject menu;
+
     public void LoadLevel(int index) // Índice da cena que será carregada
     {
         StartCoroutine(LoadAsynchronously(index));
@@ -20,5 +23,10 @@ public class Menu : LoadLevel {
     public void Opcoes(GameObject Opc)
     {
         Opc.SetActive(!Opc.active);
+    }
+    public void Logout(GameObject Log)
+    {
+        Log.SetActive(true);
+        menu.SetActive(false);
     }
 }
