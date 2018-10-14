@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// Bruno de Almeida Zampirom - 08/10/2018
+
+using UnityEngine;
 using TMPro;
 using System;
 using System.Collections;
@@ -24,7 +26,11 @@ public class CriarConta : MonoBehaviour {
     private TextMeshProUGUI sucesso; //Texto de notificação de sucesso na criação
 
     [SerializeField]
-    private GameObject ThisPanel;
+    private GameObject Login; //Panel Login
+    [SerializeField]
+    private GameObject ThisPanel; // Este Panel 'CriaConta'
+    [SerializeField]
+    private GameObject Canvas; // Canvas 
 
     private SQLiteConnection bancoDeDados;
 
@@ -35,7 +41,6 @@ public class CriarConta : MonoBehaviour {
     public void Criar()
     {
         bool erro=false;
-
         // Testa se o usuário inseriu um nome
         if(user.text.Length==0)
         {
@@ -107,16 +112,22 @@ public class CriarConta : MonoBehaviour {
 
     public void Voltar()
     {
-        userNotification.CrossFadeAlpha(0, 0.1f, false);
-        senhaNotification.CrossFadeAlpha(0, 0, false);
-        confirmaNotification.CrossFadeAlpha(0, 0, false);
-        sucesso.CrossFadeAlpha(0, 0, false);
         ThisPanel.SetActive(false);
+        ResetAlert();
+    }
+
+    private void ResetAlert()
+    {
+        userNotification.CrossFadeAlpha(0f, 0f, false);
+        senhaNotification.CrossFadeAlpha(0f, 0f, false);
+        confirmaNotification.CrossFadeAlpha(0f, 0f, false);
+        sucesso.CrossFadeAlpha(0f, 0f, false);
     }
 
     IEnumerator Esperar(int tempo)
     {
         yield return new WaitForSecondsRealtime(tempo);
         ThisPanel.SetActive(false);
+        ResetAlert();
     }
 }

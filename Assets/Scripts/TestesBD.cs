@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Bruno de Almeida Zampirom - 08/10/2018
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
