@@ -42,12 +42,12 @@ public class Login : MonoBehaviour {
                 PlayerPrefs.SetString("rememberLogin", User.text);
                 PlayerPrefs.SetString("rememberSenha", Senha.text);
             }
-            /*else // Caso ele optou por lembrar anteriormente e não deseja mais lembrar
+            else // Caso ele optou por lembrar anteriormente e não deseja mais lembrar
             {
                 PlayerPrefs.DeleteKey("remember");
                 PlayerPrefs.DeleteKey("rememberLogin");
                 PlayerPrefs.DeleteKey("rememberSenha");
-            }*/
+            }
             notification.CrossFadeAlpha(1, 0.1f, false);
             notification.color = Color.green;
             notification.text = "Login realizado com sucesso";
