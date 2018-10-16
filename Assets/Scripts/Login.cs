@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// Bruno de Almeida Zampirom - 08/10/2018
+
+using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;

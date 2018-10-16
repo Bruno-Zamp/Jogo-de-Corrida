@@ -1,4 +1,5 @@
-using System;
+// Bruno de Almeida Zampirom - 14/10/2018
+
 using UnityEngine;
 
 namespace UnityStandardAssets.Vehicles.Car
@@ -54,6 +55,7 @@ namespace UnityStandardAssets.Vehicles.Car
         public float MaxSpeed{get { return m_Topspeed; }}
         public float Revs { get; private set; }
         public float AccelInput { get; private set; }
+        
 
         // Use this for initialization
         private void Start()
@@ -194,7 +196,6 @@ namespace UnityStandardAssets.Vehicles.Car
 
         private void ApplyDrive(float accel, float footbrake)
         {
-
             float thrustTorque;
             switch (m_CarDriveType)
             {
@@ -230,6 +231,7 @@ namespace UnityStandardAssets.Vehicles.Car
                     m_WheelColliders[i].motorTorque = -m_ReverseTorque*footbrake;
                 }
             }
+
         }
 
 

@@ -1,3 +1,5 @@
+// Bruno de Almeida Zampirom - 14/10/2018
+
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
