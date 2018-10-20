@@ -6,8 +6,19 @@ using UnityEngine.SceneManagement;
 public class Pause : MonoBehaviour {
     [SerializeField]
     private GameObject panel;
- 
-    // Update is called once per frame
+
+    private void pausarEdespausar()
+    {
+        if (Time.timeScale.Equals(0f))
+        {
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            Time.timeScale = 0f;
+        }
+    }
+
     void Update () {
         
 	    if(Input.GetKeyDown(KeyCode.Escape))
@@ -34,16 +45,5 @@ public class Pause : MonoBehaviour {
     public void Sair()
     {
         Application.Quit();
-    }
-    private void pausarEdespausar()
-    {
-        if (Time.timeScale.Equals(0f))
-        {
-            Time.timeScale = 1f;
-        }
-        else
-        {
-            Time.timeScale = 0f;
-        }
     }
 }

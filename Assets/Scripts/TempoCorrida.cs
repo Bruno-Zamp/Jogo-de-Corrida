@@ -23,7 +23,7 @@ public class TempoCorrida : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        string Tempo = Time.timeSinceLevelLoad.ToString("00");
+        string Tempo = (Time.timeSinceLevelLoad - 4f).ToString("00");
         textoTempo.text = Horas(Tempo) +":"+Minutos(Tempo) +":"+Segundos(Tempo);
 	}
 }
