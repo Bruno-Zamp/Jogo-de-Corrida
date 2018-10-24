@@ -131,8 +131,9 @@ namespace UnityStandardAssets.Vehicles.Car
 
         public void Move(float steering, float accel, float footbrake, float handbrake)
         {
-            if (Time.timeSinceLevelLoad < TempoInicio)
+            if (Time.timeSinceLevelLoad < TempoInicio) // Apenas permite comandos se o tempo de inicio estiver passado 
                 return;
+
             for (int i = 0; i < 4; i++)
             {
                 Quaternion quat;
