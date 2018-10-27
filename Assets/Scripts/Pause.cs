@@ -6,11 +6,15 @@ using UnityEngine.SceneManagement;
 public class Pause : MonoBehaviour {
     [SerializeField]
     private GameObject panel;
+    [SerializeField]
+    private GameObject configPanel;
 
     private void pausarEdespausar()
     {
+        panel.SetActive(!panel.active);
         if (Time.timeScale.Equals(0f))
         {
+            configPanel.SetActive(false);
             Time.timeScale = 1f;
         }
         else
@@ -23,14 +27,16 @@ public class Pause : MonoBehaviour {
         
 	    if(Input.GetKeyDown(KeyCode.Escape))
         {
-            panel.SetActive(!panel.active);
             pausarEdespausar();
         }
 	}
+    public void Config()
+    {
+        configPanel.SetActive(!configPanel.active);
+    }
     public void Resume()
     {
         pausarEdespausar();
-        panel.SetActive(false);
     }
     public void Restart(int i)
     {

@@ -23,7 +23,7 @@ public class TempoCorrida : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-        string Tempo = (Time.timeSinceLevelLoad - 4f).ToString("00");
+        string Tempo = (Time.timeSinceLevelLoad - 2.4f).ToString("00"); // Tempo desde o level ter sido carregado menos 2.4 seg (tempo até a corrida iniciar)
         textoTempo.text = Horas(Tempo) +":"+Minutos(Tempo) +":"+Segundos(Tempo);
 	}
 }
