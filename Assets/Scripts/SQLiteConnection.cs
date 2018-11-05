@@ -4,6 +4,7 @@ using UnityEngine;
 // Imports necessários 
 using System.Data;
 using Mono.Data.SqliteClient;
+using System;
 
 public class SQLiteConnection : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class SQLiteConnection : MonoBehaviour
     private IDbCommand command;
     private IDataReader reader;
     private string dbfile = "URI=File:SQLiteDB.db";
+    private DateTime momento;
 
     void Start()
     {
@@ -25,7 +27,7 @@ public class SQLiteConnection : MonoBehaviour
         string createTable = "CREATE TABLE IF NOT EXISTS perfil(" +
             "nome VARCHAR(26) NOT NULL PRIMARY KEY, " +
             "senha VARCHAR(26) NOT NULL," +
-            "tempo INTEGER, " +
+            "tempo float, " +
             "momento real" +
             ");";
         command.CommandText = createTable;
@@ -38,11 +40,11 @@ public class SQLiteConnection : MonoBehaviour
         command.CommandText = insertValues;
         command.ExecuteNonQuery();
     }
-    public void AtualizaTempo(string user, string tempo)
+    public void AtualizaTempo(string user, float tempo)
     {
         string updateTempo = string.Format("UPDATE perfil " +
-                             "SET tempo = {0}, momento = julianday('now', 'localtime') " +
-                             "WHERE nome = {1}",user,tempo);
+                             "SET tempo = {0} , momento = julianday('now', 'localtime') " +
+                             "WHERE nome = '{1}' ;",tempo,user);
         command.CommandText = updateTempo;
         command.ExecuteNonQuery();
     }
@@ -56,15 +58,15 @@ public class SQLiteConnection : MonoBehaviour
         {
             string nome = reader.GetString(0);
             string senha = reader.GetString(1);
-            int tempo = reader.GetInt32(2);
-            System.DateTime momento = reader.GetDateTime(3);
+            float tempo = reader.GetFloat(2);
+            DateTime momento = reader.GetDateTime(3);
             Debug.Log("nome= " + nome + 
                       "\ntempo= "+ tempo+
                       "\nsenha= "+ senha +
                       "\nmomento= "+ momento.ToString());
         }
     }
-    public bool Select(string user, string senha) // Select de um usuário e senha específico  
+    public bool Select(string user, string senha) // Select de um usuário e senha específico (para verificar se usuário e senha estão corretos)  
     {
         string select = string.Format("SELECT 1 FROM perfil WHERE nome = '{0}' AND senha = '{1}' ;", user, senha);
         command.CommandText = select;
@@ -87,7 +89,30 @@ public class SQLiteConnection : MonoBehaviour
         }
         return false; // Não existe esse username . . .
     }
+    public float TempoUser(string user)
+    {
+        string select = string.Format("SELECT tempo FROM perfil WHERE nome = '{0}' ;", user);
+        command.CommandText = select;
+        reader = command.ExecuteReader();
+        if (reader.RecordsAffected == 0) //Caso não exista tempo para esse usuário
+        {
+            return 99999999; // Caso o usuário nunca postou um tempo estipula um tempo elevado;
+        }
+        else 
+        {
+            reader.Read();
+            return reader.GetFloat(0); // Existe essa combinação registrada no banco
+        }
+    }
+    public DateTime DataUser(string user)
+    {
+        string select = string.Format("SELECT time(momento) FROM perfil WHERE nome = '{0}' ;", user);
+        command.CommandText = select;
+        reader = command.ExecuteReader();
 
+        reader.Read();
+        return reader.GetDateTime(0);
+    }
     public void DropTable() //Drop da Tabela
     {
         string dropTable = "DROP TABLE IF EXISTS perfil;";

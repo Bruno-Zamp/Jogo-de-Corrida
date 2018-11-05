@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Bruno de Almeida Zampirom - 24/10/2018
+
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -7,7 +7,7 @@ using UnityEngine.PostProcessing;
 
 public class PauseConfig : MonoBehaviour {
     [SerializeField]
-    private TMP_Dropdown Resolucoes, Qualidades, PostProcessing;
+    private TMP_Dropdown Resolucoes, Qualidades, PostProcessingDropdown;
     [Space(20)]
     [SerializeField]
     Toggle telaCheia;
@@ -20,6 +20,7 @@ public class PauseConfig : MonoBehaviour {
     // Use this for initialization
     void Start () {
         InserirValoresDropdown();
+        PostProcessingDropdown.value = postProcessingSet(); //Setando a config atual 
     }
 	void InserirValoresDropdown()
     {
@@ -47,26 +48,27 @@ public class PauseConfig : MonoBehaviour {
         Qualidades.captionText.text = "Qualidade";
 
         // Atualizar Dropdown do Pós processamento
-        PostProcessing.options.Clear();
-        PostProcessing.options.Add(new TMP_Dropdown.OptionData() { text = "Nada" });
-        PostProcessing.options.Add(new TMP_Dropdown.OptionData() { text = "Mínimo"});
-        PostProcessing.options.Add(new TMP_Dropdown.OptionData() { text = "Médio" });
-        PostProcessing.options.Add(new TMP_Dropdown.OptionData() { text = "Máximo" });
-        PostProcessing.captionText.text = "Pós Processamento";
+        PostProcessingDropdown.options.Clear();
+        PostProcessingDropdown.options.Add(new TMP_Dropdown.OptionData() { text = "Nada" });
+        PostProcessingDropdown.options.Add(new TMP_Dropdown.OptionData() { text = "Mínimo"});
+        PostProcessingDropdown.options.Add(new TMP_Dropdown.OptionData() { text = "Médio" });
+        PostProcessingDropdown.options.Add(new TMP_Dropdown.OptionData() { text = "Alto" });
+        PostProcessingDropdown.options.Add(new TMP_Dropdown.OptionData() { text = "Máximo" });
+        PostProcessingDropdown.captionText.text = "Pós Processamento";
     }
 	public void Salvar() // Aplica configurações selecionadas pelo usuário
     {
         QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("qualidadeGrafica"));
-        Screen.SetResolution(resolucoesSuportadas[Resolucoes.value].width, resolucoesSuportadas[Resolucoes.value].height, !telaCheia);
-        postProcessingConfig(PostProcessing.value); 
-        PostProcessing.value = postProcessingSet(); //Setando a config atual 
+        Screen.SetResolution(resolucoesSuportadas[Resolucoes.value].width, resolucoesSuportadas[Resolucoes.value].height, telaCheia.isOn);
+        postProcessingConfig(PostProcessingDropdown.value); 
+        PostProcessingDropdown.value = postProcessingSet(); //Setando a config atual 
     }
     public void Voltar()
     {
         Config.SetActive(false);
     }
     // Configurar pós processamento
-    private void postProcessingConfig(int n)
+    private void postProcessingConfig(int n) // Altera o valor do pós processamento, informando um valor de 1-4 quanto mais alto o número mais filtros aplicados...
     {
         if (n == 0) // Configuração sem Pós processamento
         {
@@ -100,13 +102,26 @@ public class PauseConfig : MonoBehaviour {
             postProcessing.ambientOcclusion.enabled = false;
             postProcessing.screenSpaceReflection.enabled = true;
             postProcessing.depthOfField.enabled = false;
+            postProcessing.motionBlur.enabled = false;
+            postProcessing.eyeAdaptation.enabled = false;
+            postProcessing.bloom.enabled = false;
+            postProcessing.chromaticAberration.enabled = true;
+
+        }
+        else if (n == 3) // Configuração com pós processamento alto 
+        {
+            postProcessing.fog.enabled = true;
+            postProcessing.antialiasing.enabled = true;
+            postProcessing.ambientOcclusion.enabled = true;
+            postProcessing.screenSpaceReflection.enabled = true;
+            postProcessing.depthOfField.enabled = false;
             postProcessing.motionBlur.enabled = true;
             postProcessing.eyeAdaptation.enabled = false;
             postProcessing.bloom.enabled = false;
             postProcessing.chromaticAberration.enabled = true;
 
         }
-        else if (n == 3) // Configuração com pós processamento máximo 
+        else if (n == 4) // Configuração com pós processamento máximo 
         {
             postProcessing.fog.enabled = true;
             postProcessing.antialiasing.enabled = true;
@@ -122,21 +137,25 @@ public class PauseConfig : MonoBehaviour {
     }
     private int postProcessingSet()
     {
-        if (postProcessing.bloom.enabled) // Única configuração que consta com Bloom é a máxima, então retorna (3)"máxima"
+        if (postProcessing.bloom.enabled) // Única configuração que consta com Bloom é a máxima, então retorna (4)"máxima"
+        {
+            return 4;
+        }
+        else if(postProcessing.motionBlur.enabled) // Caso não for máxima e tiver motion blur , então retorna (3)"alta"
         {
             return 3;
         }
-        else if(postProcessing.antialiasing.enabled)
+        else if (postProcessing.antialiasing.enabled) // Caso não for alta e tiver antialiasing , então retorna (2)"médio"
         {
             return 2;
         }
-        else if(postProcessing.fog.enabled)
+        else if(postProcessing.fog.enabled) // Caso não for médio e tiver fog , então retorna (1)"mínimo" 
         {
             return 1;
         }
         else
         {
-            return 0;
+            return 0; // Caso não tiver nada retorna 0, "nada"
         }
     }
 }

@@ -9,8 +9,8 @@ namespace UnityStandardAssets.Cameras
     [ExecuteInEditMode]
     public class AutoCam : PivotBasedCameraRig
     {
-        [SerializeField] private float m_MoveSpeed = 3; // How fast the rig will move to keep up with target's position
-        [SerializeField] private float m_TurnSpeed = 1; // How fast the rig will turn to keep up with target's rotation
+        public float m_MoveSpeed = 3; // How fast the rig will move to keep up with target's position
+        public float m_TurnSpeed = 1; // How fast the rig will turn to keep up with target's rotation
         [SerializeField] private float m_RollSpeed = 0.2f;// How fast the rig will roll (around Z axis) to match target's roll.
         [SerializeField] private bool m_FollowVelocity = false;// Whether the rig will rotate in the direction of the target's velocity.
         [SerializeField] private bool m_FollowTilt = true; // Whether the rig will tilt (around X axis) with the target.
@@ -22,7 +22,6 @@ namespace UnityStandardAssets.Cameras
         private float m_CurrentTurnAmount; // How much to turn the camera
         private float m_TurnSpeedVelocityChange; // The change in the turn speed velocity
         private Vector3 m_RollUp = Vector3.up;// The roll of the camera around the z axis ( generally this will always just be up )
-
 
         protected override void FollowTarget(float deltaTime)
         {
