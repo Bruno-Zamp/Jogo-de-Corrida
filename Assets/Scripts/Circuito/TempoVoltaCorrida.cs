@@ -11,8 +11,10 @@ public class TempoVoltaCorrida : MonoBehaviour {
     private Animation lastLap;
     CommitTempoCircuito CommitTempo;
 
+    bool auxlastLap = true; // Variável auxiliar, para que a animação 'lastLap' seja executada apenas uma vez
     private void Start()
     {
+        auxlastLap = true;
         CommitTempo = FindObjectOfType<CommitTempoCircuito>();
     }
     static string Segundos(string s)
@@ -39,9 +41,10 @@ public class TempoVoltaCorrida : MonoBehaviour {
         // Configura Volta
         int aux = CarSystemCheckpoint.voltaAtual;
         textoVolta.text = aux.ToString() + "/" + CommitTempo.TotalDeVoltas.ToString();
-        if(aux == CommitTempo.TotalDeVoltas)
+        if(aux == CommitTempo.TotalDeVoltas && auxlastLap)
         {
             lastLap.Play();
+            auxlastLap = false;
         }
         aux = CarSystemCheckpoint.checkpointAtual; // Teste de checkpoints. Usado pra debug
         textoCheckpoint.text = aux.ToString() + "/6";

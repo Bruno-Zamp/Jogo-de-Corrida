@@ -22,7 +22,6 @@ public class Login : MonoBehaviour {
 
     public static string UsuarioAtual;
     
-
     SQLiteConnection bancoDeDados;
 
     void Start()

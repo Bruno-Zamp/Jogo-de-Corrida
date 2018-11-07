@@ -10,27 +10,27 @@ public class CommitTempoCircuito : MonoBehaviour {
     public static bool PermiteUsuarioMover = false; // Variável que possibilita o usuário interagir com o jogo
 
     [SerializeField]
-    private TextMeshProUGUI TempoAtual, TempoRecorde;
+    private TextMeshProUGUI TempoAtual, TempoRecorde, NomeUsuario;
     [SerializeField]
     private GameObject PanelFinal,Tempo,Volta,Velocimetro;
 
     public int TotalDeVoltas = 8; //Volta final do circuito
     public float tempoDeEsperaInicial = 2.4f;
 
-    private bool ativa = true; // Para ser chamado em apenas um frame após o final da corrida
+    private bool ativa = true; // Para ser chamado em apenas uma vez após o final da corrida
     SQLiteConnection bancoDeDados;
 
     private void Start()
     {
         PermiteUsuarioMover = false; // Variável que possibilita o usuário interagir com o jogo
-
-    bancoDeDados = FindObjectOfType<SQLiteConnection>();
+        NomeUsuario.text = Login.UsuarioAtual;
+        bancoDeDados = FindObjectOfType<SQLiteConnection>();
     }
     // Update is called once per frame
     void Update () {
         TempoPossivel();
 
-	    if(CarSystemCheckpoint.voltaAtual == TotalDeVoltas && ativa) // Caso o usuário terminou a corrida
+	    if(CarSystemCheckpoint.voltaAtual > TotalDeVoltas && ativa) // Caso o usuário terminou a corrida
         {
             ativa = PermiteUsuarioMover = false;
             Tempo.SetActive(false);
@@ -40,7 +40,7 @@ public class CommitTempoCircuito : MonoBehaviour {
             try
             {
                 float tempoDeVolta = Time.timeSinceLevelLoad - tempoDeEsperaInicial;
-                if ( tempoDeVolta < bancoDeDados.TempoUser(Login.UsuarioAtual))
+                if (!bancoDeDados.UserJaCorreu(Login.UsuarioAtual) || tempoDeVolta < bancoDeDados.TempoUser(Login.UsuarioAtual)) // Caso o usuário superou seu recorde
                 {
                     bancoDeDados.AtualizaTempo(Login.UsuarioAtual, tempoDeVolta);
                 }
