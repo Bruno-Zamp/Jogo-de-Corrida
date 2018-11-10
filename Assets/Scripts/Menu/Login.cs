@@ -56,7 +56,7 @@ public class Login : MonoBehaviour {
             notification.color = Color.green;
             notification.text = "Login realizado com sucesso";
 
-            StartCoroutine(Esperar(2));
+            StartCoroutine(Esperar(1));
         }
         else
         {
@@ -73,8 +73,9 @@ public class Login : MonoBehaviour {
     
     public void CriarConta(GameObject CriarConta)
     {
-        ResetAlert();
         CriarConta.SetActive(true);
+        ThisPanel.SetActive(false);
+        ResetAlert();
     }
 
     IEnumerator Esperar(int tempo) // Caso o Login prossiga

@@ -112,6 +112,7 @@ public class CriarConta : MonoBehaviour {
 
     public void Voltar()
     {
+        Login.SetActive(true);
         ThisPanel.SetActive(false);
         ResetAlert();
     }
@@ -127,6 +128,7 @@ public class CriarConta : MonoBehaviour {
     IEnumerator Esperar(int tempo)
     {
         yield return new WaitForSecondsRealtime(tempo);
+        Login.SetActive(true);
         ThisPanel.SetActive(false);
         ResetAlert();
     }
