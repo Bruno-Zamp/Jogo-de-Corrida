@@ -36,12 +36,11 @@ public class SQLiteConnection : MonoBehaviour
     }
     public void CreateAccount(string nome, string senha) //Executa as inserçoes do nome e senha de usuário
     {
-
         string insertValues = string.Format("INSERT INTO perfil(nome,senha,tempo,momento) VALUES('{0}','{1}',null,null);", nome, senha);
         command.CommandText = insertValues;
         command.ExecuteNonQuery();
     }
-    public void AtualizaTempo(string user, float tempo)
+    public void AtualizaTempo(string user, float tempo) // Atualiza o tempo do usuário (o controle do menor tempo fica responsabilidade do script que chamar a função)
     {
         string updateTempo = string.Format("UPDATE perfil " +
                              "SET tempo = {0} , momento = julianday('now', 'localtime') " +
@@ -66,7 +65,7 @@ public class SQLiteConnection : MonoBehaviour
     }
     public void Select()
     {
-        string select = "SELECT nome, senha, tempo, time(momento) FROM perfil order by tempo;";
+        string select = "SELECT nome, senha, tempo, datetime(momento) FROM perfil order by tempo;";
         command.CommandText = select;
         reader = command.ExecuteReader();
         while (reader.Read())
@@ -93,7 +92,7 @@ public class SQLiteConnection : MonoBehaviour
         return false; // Não existe essa combinação . . .
     }
 
-    public bool UserNameExists(string user)
+    public bool UserNameExists(string user) // Verifica se este nome de usuário ja se encontra no BD
     {
         string select = string.Format("SELECT 1 FROM perfil WHERE nome = '{0}';", user);
         command.CommandText = select;
@@ -104,33 +103,31 @@ public class SQLiteConnection : MonoBehaviour
         }
         return false; // Não existe esse username . . .
     }
-    public bool UserJaCorreu(string user)
+    public bool UserJaCorreu(string user) // Verifica se determinado usuário contém um tempo presente no BD
     {
-        string select = string.Format("SELECT tempo FROM perfil WHERE nome = '{0}' ;", user);
+        string select = string.Format("SELECT tempo FROM perfil WHERE nome = '{0}' ;", user); 
         command.CommandText = select;
         reader = command.ExecuteReader();
         reader.Read();
         if (reader.GetFloat(0)==0)
         {
-            return false;
+            return false; // Não correu...
         }
-        return true; // Existe essa combinação registrada no banco
+        return true; // Já havia corrido
     }
-    public float TempoUser(string user)
+    public float TempoUser(string user) // Busca o tempo de um usuário 
     {
         string select = string.Format("SELECT tempo FROM perfil WHERE nome = '{0}' ;", user);
         command.CommandText = select;
         reader = command.ExecuteReader();
         reader.Read();
-        return reader.GetFloat(0); // Existe essa combinação registrada no banco
-
+        return reader.GetFloat(0); 
     }
-    public DateTime DataUser(string user)
+    public DateTime DataUser(string user) // Busca a data em que o usuário postou o tempo no BD
     {
-        string select = string.Format("SELECT time(momento) FROM perfil WHERE nome = '{0}' ;", user);
+        string select = string.Format("SELECT datetime(momento) FROM perfil WHERE nome = '{0}' ;", user);
         command.CommandText = select;
         reader = command.ExecuteReader();
-
         reader.Read();
         return reader.GetDateTime(0);
     }

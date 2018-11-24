@@ -33,6 +33,7 @@ public class CommitTempoCircuito : MonoBehaviour {
 	    if(CarSystemCheckpoint.voltaAtual > TotalDeVoltas && ativa) // Caso o usuário terminou a corrida
         {
             ativa = PermiteUsuarioMover = false;
+            Cursor.visible = true; 
             Tempo.SetActive(false);
             Volta.SetActive(false);
             Velocimetro.SetActive(false);

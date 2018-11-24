@@ -9,22 +9,30 @@ public class Pause : MonoBehaviour {
     [SerializeField]
     private GameObject configPanel;
 
+    private void Awake()
+    {
+        Cursor.visible = false; // Seta a visibilidade do cursor do mouse
+    }
+
     private void pausarEdespausar()
     {
         panel.SetActive(!panel.active);
-        if (Time.timeScale.Equals(0f))
+        if (!panel.active) // Despausado
         {
             configPanel.SetActive(false);
             Time.timeScale = 1f;
+            Cursor.visible = false;
+            AudioListener.volume = 1;
         }
-        else
+        else // Pausado
         {
             Time.timeScale = 0f;
+            Cursor.visible = true;
+            AudioListener.volume = 0; // Muta o jogo
         }
     }
-
+    
     void Update () {
-        
 	    if(Input.GetKeyDown(KeyCode.Escape))
         {
             pausarEdespausar();
@@ -46,6 +54,7 @@ public class Pause : MonoBehaviour {
     public void Menu(int i)
     {
         pausarEdespausar();
+        Cursor.visible = true;
         SceneManager.LoadSceneAsync(i);
     }
     public void Sair()

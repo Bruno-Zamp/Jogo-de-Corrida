@@ -7,7 +7,7 @@ using UnityEngine.PostProcessing;
 
 public class PauseConfig : MonoBehaviour {
     [SerializeField]
-    private TMP_Dropdown Resolucoes, Qualidades, PostProcessingDropdown;
+    private TMP_Dropdown Resolucoes, Qualidades, PostProcessingDropdown, Vsync;
     [Space(20)]
     [SerializeField]
     Toggle telaCheia;
@@ -36,7 +36,7 @@ public class PauseConfig : MonoBehaviour {
             }
         }
         Resolucoes.captionText.text = "Resolução";
-
+        
         //Atualizar Dropdown das qualidades gráficas
         string[] nomes = QualitySettings.names;
         Qualidades.options.Clear();
@@ -47,6 +47,14 @@ public class PauseConfig : MonoBehaviour {
         Qualidades.value = QualitySettings.GetQualityLevel();
         Qualidades.captionText.text = "Qualidade";
 
+        //Atualizar Dropdown das qualidades gráficas
+        Vsync.options.Clear();
+        Vsync.options.Add(new TMP_Dropdown.OptionData() { text = "Desligado"});
+        Vsync.options.Add(new TMP_Dropdown.OptionData() { text = "Meio (30fps)" });
+        Vsync.options.Add(new TMP_Dropdown.OptionData() { text = "Cheio (60fps)" });
+        Vsync.value = QualitySettings.vSyncCount;
+        Vsync.captionText.text = "Vsync";
+        
         // Atualizar Dropdown do Pós processamento
         PostProcessingDropdown.options.Clear();
         PostProcessingDropdown.options.Add(new TMP_Dropdown.OptionData() { text = "Nada" });
@@ -58,7 +66,8 @@ public class PauseConfig : MonoBehaviour {
     }
 	public void Salvar() // Aplica configurações selecionadas pelo usuário
     {
-        QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("qualidadeGrafica"));
+        QualitySettings.SetQualityLevel(Qualidades.value);
+        QualitySettings.vSyncCount = Vsync.value;
         Screen.SetResolution(resolucoesSuportadas[Resolucoes.value].width, resolucoesSuportadas[Resolucoes.value].height, telaCheia.isOn);
         postProcessingConfig(PostProcessingDropdown.value); 
         PostProcessingDropdown.value = postProcessingSet(); //Setando a config atual 
